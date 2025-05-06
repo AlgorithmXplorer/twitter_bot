@@ -51,9 +51,8 @@ class bot:
         time.sleep(1.5)
         
         self.is_log_in = True
-        
-    
-    def follows_or_followers(self,user_name:str , choice:str , count=None):
+
+    def follows_or_followers(self,user_name:str , choice:str , count=None) -> dict:
         if not self.is_log_in:
             raise Exception("bot did not log in")
 
@@ -139,14 +138,52 @@ class bot:
             follow_list = inner()
             return follow_list
 
+    def user_search(self,name) -> dict:
+        if not self.is_log_in :
+            raise Exception("bot did not log in")
+        
+        #*data sending to search input
+        self.driver.get(self.main_url)
+        time.sleep(1.5)
+        inp_tag = self.driver.find_element(By.XPATH , "//input[@data-testid='SearchBox_Search_Input']")
+        inp_tag.send_keys(f"#{name}")
+        inp_tag.send_keys(Keys.ENTER)
+        time.sleep(6)
 
+        #* users page opens
+        list_of_butons =  self.driver.find_elements(By.XPATH ,"//div[@class='css-175oi2r r-14tvyh0 r-cpa5s6 r-16y2uox']") 
+        users_div = list_of_butons[2]
+        users_div.find_element(By.CSS_SELECTOR ,".css-1jxf684.r-bcqeeo.r-1ttztb7.r-qvutc0.r-poiln3").click()
+        time.sleep(6)
+
+        #* Retrieving users
+        all_user_div_tags = self.driver.find_elements(By.XPATH ,"//div[@data-testid='cellInnerDiv']")
+        users = {}
+        
+        for div_tag in all_user_div_tags:
+            #* Retrieving username 
+            username_span = div_tag.find_element(By.CSS_SELECTOR , ".css-1jxf684.r-bcqeeo.r-1ttztb7.r-qvutc0.r-poiln3")
+
+            #* Retrieving user url 
+            url_a_tag =div_tag.find_element(By.CSS_SELECTOR , ".css-175oi2r.r-1wbh5a2.r-dnmrzs.r-1ny4l3l.r-1loqt21")
+
+            users.update({username_span.text : url_a_tag.get_attribute("href")})
+        return users
 
 
 first_bot = bot(email= "tanrininkirbaci36@gmail.com", password= "watchdogs.2007-2025//musty", username= "x_bot_1")
+
 first_bot.log_in()
-time.sleep(3)
+time.sleep(4.5)
 
 # liste = first_bot.follows_or_followers(user_name="Ebonivonn",choice="following")
+
+# users = first_bot.user_search(name="ebo")
+# print(users)
+
+
+time.sleep(1000)
+
 
 
 
