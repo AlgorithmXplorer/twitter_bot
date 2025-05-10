@@ -142,8 +142,10 @@ class bot:
         if not self.is_log_in :
             raise Exception("bot did not log in")
         
-        #*data sending to search input
+        #*return to main page
         self.driver.get(self.main_url)
+
+        #*data sending to search input
         time.sleep(1.5)
         inp_tag = self.driver.find_element(By.XPATH , "//input[@data-testid='SearchBox_Search_Input']")
         inp_tag.send_keys(f"#{name}")
@@ -170,17 +172,86 @@ class bot:
             users.update({username_span.text : url_a_tag.get_attribute("href")})
         return users
 
+    def search_tweet(self,topic:str,count:int) -> dict:
+        if self.is_log_in == False:
+            raise Exception("bot did not log in")
+        
+        #*return to main page
+        self.driver.get(self.main_url)
+        time.sleep(1.5)
+
+        #* searching the topic with hashtag
+        inp_tag = self.driver.find_element(By.XPATH ,"//input[@data-testid='SearchBox_Search_Input']")
+        inp_tag.send_keys(f"#{topic}")
+        inp_tag.send_keys(Keys.ENTER)
+        time.sleep(6)
+
+        def tweet_taker()->dict:
+            tweets = {}
+            text_list = self.driver.find_elements(By.XPATH , "//div[@data-testid='tweetText']")
+            name_list = self.driver.find_elements(By.XPATH , "//div[@data-testid ='User-Name' ]")
+            
+            for text_div , name_div in zip(text_list,name_list):
+                #*tweet text datas getting
+                text_span_tags =text_div.find_elements(By.CSS_SELECTOR , ".css-1jxf684.r-bcqeeo.r-1ttztb7.r-qvutc0.r-poiln3")
+                text = "  //  ".join([ span.text for span in text_span_tags if len(span.text) >2])
+                
+                #* the user who owns tweet
+                username = name_div.find_element(By.CSS_SELECTOR , ".css-1jxf684.r-bcqeeo.r-1ttztb7.r-qvutc0.r-poiln3")
+                
+                tweets.update({username.text : text})
+            return tweets
+        
+        def scroll_func():
+            first_height = self.driver.execute_script("return document.scrollingElement.scrollHeight")
+            
+            scroling = self.driver.execute_script(f"window.scrollTo(0,{first_height})")
+
+            last_height =  self.driver.execute_script("return document.scrollingElement.scrollHeight")
+            print(last_height)
+            if last_height == first_height:
+                raise ValueError("all tweets are appeared")
+            
+        def main(tweet_func , scroler , count:int) -> dict:
+            tweets = {}
+            while True:
+                tweet_list = tweet_func()
+                tweets.update(tweet_list)
+
+                if len(tweets) > count:
+                    return tweets
+                try:
+                    scroler()
+                except ValueError as error:
+                    print(error)
+                    return tweets
+                time.sleep(1.5)
+
+        first_list = main(tweet_func=tweet_taker , scroler= scroll_func, count=count)
+        last_list ={}
+        #*slicng
+        for name,text in first_list.items():
+            last_list.update({name:text})
+            if len(last_list) == count:
+                return last_list
+        
 
 first_bot = bot(email= "tanrininkirbaci36@gmail.com", password= "watchdogs.2007-2025//musty", username= "x_bot_1")
 
 first_bot.log_in()
 time.sleep(4.5)
 
+#* user follower or follows getting
 # liste = first_bot.follows_or_followers(user_name="Ebonivonn",choice="following")
 
+#* user searching
 # users = first_bot.user_search(name="ebo")
 # print(users)
 
+#* tweet searching
+# tweets = first_bot.search_tweet(topic = "john wick" ,count = 20)
+# print(tweets)
+# print(len(tweets))
 
 time.sleep(1000)
 
@@ -194,7 +265,7 @@ time.sleep(1000)
 #todo panelde olucak seçenekler
 """
 - log in
-- search (twweet) 
+- search (tweet) 
 - user searching (eğer öyle bir kullanıcı varsa linkini atıcak)
 - followers - follows 
 - maybe grok question
