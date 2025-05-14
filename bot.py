@@ -227,14 +227,62 @@ class bot:
                     return tweets
                 time.sleep(1.5)
 
+        #*slicng
         first_list = main(tweet_func=tweet_taker , scroler= scroll_func, count=count)
         last_list ={}
-        #*slicng
         for name,text in first_list.items():
             last_list.update({name:text})
             if len(last_list) == count:
                 return last_list
         
+    def daily_tweets(self,count:int = 20):
+        if not self.is_log_in:
+            raise Exception("bot did not log in")
+        
+        self.driver.get(url= self.main_url)
+        time.sleep(3)
+
+        #* tweet taker func 
+        def inner():
+            tweets = {}
+            #* tweets taking
+            text_div_tags = self.driver.find_elements(By.XPATH , "//div[@data-testid = 'tweetText']")
+            username_div_tags = self.driver.find_elements(By.XPATH , "//div[@data-testid = 'User-Name']")
+            
+            #* username and tweet text taking
+            for text_div , username_div in zip(text_div_tags , username_div_tags):
+                username = username_div.find_element(By.CSS_SELECTOR , ".css-1jxf684.r-bcqeeo.r-1ttztb7.r-qvutc0.r-poiln3")
+
+                text_list = text_div.find_elements(By.CSS_SELECTOR , ".css-1jxf684.r-bcqeeo.r-1ttztb7.r-qvutc0.r-poiln3")
+                text = "   ".join([span.text for span in text_list if len(span.text) > 2])
+
+                tweets.update({username.text :  text})
+            return tweets
+        
+        def scroller():
+            scroll_bar_height = self.driver.execute_script("return document.scrollingElement.scrollHeight")
+            
+            self.driver.execute_script(f"window.scrollTo(0,{scroll_bar_height})")
+            time.sleep(4.5)
+
+        daily_tweets = inner()
+        while True:
+            if len(daily_tweets) >= count:
+                break
+            
+            scroller()
+            
+            new_tweets = inner()
+            daily_tweets.update(new_tweets)
+        
+        daily_tweets_2 = {}
+        #* slicing
+        for username,text in daily_tweets.items():
+            if len(daily_tweets_2) == count:
+                return daily_tweets_2
+            daily_tweets_2.update({username:text})
+        
+
 
 first_bot = bot(email= "tanrininkirbaci36@gmail.com", password= "watchdogs.2007-2025//musty", username= "x_bot_1")
 
@@ -253,6 +301,12 @@ time.sleep(4.5)
 # print(tweets)
 # print(len(tweets))
 
+#* daily tweets taking
+# daily_tweets = first_bot.daily_tweets()
+# print(daily_tweets)
+# print(len(daily_tweets))
+
+
 time.sleep(1000)
 
 
@@ -268,6 +322,7 @@ time.sleep(1000)
 - search (tweet) 
 - user searching (eğer öyle bir kullanıcı varsa linkini atıcak)
 - followers - follows 
+- daily tweets
 - maybe grok question
 
 """
