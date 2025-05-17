@@ -275,9 +275,7 @@ class bot:
         
         tweets = inner()
         print(tweets)
-        self.driver.set_window_size(800,600)
-        time.sleep(3)
-
+        
         while True:
             if user_choice_getting() == "n":
                 break
@@ -286,11 +284,72 @@ class bot:
                 new_tweets = inner()
                 print(new_tweets)
         
+    def ask_grok(self):
+        if not self.is_log_in:
+            raise Exception("bot did not log in")
 
-        #todo kullancıdan sadece next ? sorusu sorulacak.Eğer yes derse 10 tane daha getirecek.
+        self.driver.get(url = self.main_url)
+        time.sleep(1.5)
+
+        #* entering to grok page
+        self.driver.get(url= "https://x.com/i/grok")
+        time.sleep(1.5)
+
+        def question_getting():
+            while True:
+                question = input("what are you going to ask grok: ").strip(" ").lower()
+                if question == "":
+                    print("please write the question correctly")
+                else:
+                    return question
+
+        def waiting():
+            strs = [".",". .",". . ."]
+
+            for i in range(2):
+                print(strs[0])
+                time.sleep(0.5)
+
+                print(strs[1])
+                time.sleep(0.5)
+
+                print(strs[2])
+                time.sleep(0.5)
+
+                print(strs[1])
+                time.sleep(0.5)
+
+        def asking(question:str):
+            
+            ask_bar = self.driver.find_element(By.XPATH , "//textarea[@autocapitalize='sentences']")
+            #* entering the question to grok
+            ask_bar.send_keys(question)
+            time.sleep(0.5)
+            ask_bar.send_keys(Keys.ENTER)
         
-#todo  günlük tweetleri güncel olarak kullanıcı alıcak yani ilk tweetler gelince kullanıcıya daha fazla getirelecek mi diye sorcaka
+            waiting()
+            
 
+            #* returning the answer
+            print("Question:",question)
+            answer_span = self.driver.find_element(By.CSS_SELECTOR, ".css-146c3p1.r-bcqeeo.r-1ttztb7.r-qvutc0.r-37j5jr.r-a023e6.r-16dba41.r-1adg3ll.r-a8ghvy.r-p1pxzi")
+            print(f"GROK:  {answer_span.text}",end="\n\n")
+
+
+        question = question_getting()
+
+        while True:
+            try:
+                asking(question=question)
+            except:
+                waiting()
+            else:
+                break
+
+
+    #* grok limiti doldu 2 saat sonra tekrar gel        
+
+        
 
 first_bot = bot(email= "tanrininkirbaci36@gmail.com", password= "watchdogs.2007-2025//musty", username= "x_bot_1")
 
@@ -310,8 +369,10 @@ time.sleep(4.5)
 # print(len(tweets))
 
 #* daily tweets taking
-daily_tweets = first_bot.daily_tweets()
+# daily_tweets = first_bot.daily_tweets()
 
+#* asking to grok ai
+first_bot.ask_grok()
 
 
 time.sleep(1000)
