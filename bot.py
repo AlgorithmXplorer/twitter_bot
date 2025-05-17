@@ -235,7 +235,7 @@ class bot:
             if len(last_list) == count:
                 return last_list
         
-    def daily_tweets(self,count:int = 20):
+    def daily_tweets(self):
         if not self.is_log_in:
             raise Exception("bot did not log in")
         
@@ -265,23 +265,31 @@ class bot:
             self.driver.execute_script(f"window.scrollTo(0,{scroll_bar_height})")
             time.sleep(4.5)
 
-        daily_tweets = inner()
+        def user_choice_getting():
+            while True:
+                user_choice = input("do you want more tweet? (y/n): ").lower().strip(" ")
+                if user_choice not in ["y","n"]:
+                    print("please enter your choice correctly")
+                else:
+                    return user_choice
+        
+        tweets = inner()
+        print(tweets)
+        self.driver.set_window_size(800,600)
+        time.sleep(3)
+
         while True:
-            if len(daily_tweets) >= count:
+            if user_choice_getting() == "n":
                 break
-            
-            scroller()
-            
-            new_tweets = inner()
-            daily_tweets.update(new_tweets)
+            else:
+                scroller()
+                new_tweets = inner()
+                print(new_tweets)
         
-        daily_tweets_2 = {}
-        #* slicing
-        for username,text in daily_tweets.items():
-            if len(daily_tweets_2) == count:
-                return daily_tweets_2
-            daily_tweets_2.update({username:text})
+
+        #todo kullancıdan sadece next ? sorusu sorulacak.Eğer yes derse 10 tane daha getirecek.
         
+#todo  günlük tweetleri güncel olarak kullanıcı alıcak yani ilk tweetler gelince kullanıcıya daha fazla getirelecek mi diye sorcaka
 
 
 first_bot = bot(email= "tanrininkirbaci36@gmail.com", password= "watchdogs.2007-2025//musty", username= "x_bot_1")
@@ -302,9 +310,8 @@ time.sleep(4.5)
 # print(len(tweets))
 
 #* daily tweets taking
-# daily_tweets = first_bot.daily_tweets()
-# print(daily_tweets)
-# print(len(daily_tweets))
+daily_tweets = first_bot.daily_tweets()
+
 
 
 time.sleep(1000)
