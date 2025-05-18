@@ -375,7 +375,7 @@ class bot:
                 new_tweets = inner()
                 print(new_tweets)
         
-    def ask_grok(self) -> None:
+    def ask_grok(self) -> str:
         if not self.is_log_in:
             raise Exception("bot did not log in")
 
@@ -422,20 +422,20 @@ class bot:
             
 
             #* returning the answer
-            print("Question:",question)
             answer_span = self.driver.find_element(By.CSS_SELECTOR, ".css-146c3p1.r-bcqeeo.r-1ttztb7.r-qvutc0.r-37j5jr.r-a023e6.r-16dba41.r-1adg3ll.r-a8ghvy.r-p1pxzi")
-            print(f"GROK:  {answer_span.text}",end="\n\n")
+            return_data = f"Question: {question}\nGROK:  {answer_span.text}\n\n"
+            return return_data
 
 
         question = question_getting()
 
         while True:
             try:
-                asking(question=question)
+                answer = asking(question=question)
             except:
                 waiting()
             else:
-                break
+                return answer
 
 
     #* grok limiti doldu 2 saat sonra tekrar gel        
@@ -448,9 +448,9 @@ first_bot.log_in()
 time.sleep(4.5)
 
 #* user follower or follows getting
-liste = first_bot.follows_or_followers()
-print(len(liste))
-print(liste)
+# liste = first_bot.follows_or_followers()
+# print(len(liste))
+# print(liste)
 
 #* user searching
 # users = first_bot.user_search()
@@ -465,12 +465,8 @@ print(liste)
 # daily_tweets = first_bot.daily_tweets()
 
 #* asking to grok ai
-# first_bot.ask_grok()
-
-
-time.sleep(1000)
-
-
+# x = first_bot.ask_grok()
+# print(x)
 
 
 
