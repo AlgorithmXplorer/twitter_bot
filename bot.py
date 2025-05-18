@@ -52,17 +52,62 @@ class bot:
         
         self.is_log_in = True
 
-    def follows_or_followers(self,user_name:str , choice:str , count=None) -> dict:
+    def follows_or_followers(self) -> dict:
         if not self.is_log_in:
             raise Exception("bot did not log in")
 
+        #* name ,count and follower or following choice getting
+        def name_taker() -> str:
+            while True:
+                try:
+                    name = input("enter an username: ").strip(" ")
+                    if len(name) > 15:
+                        raise ValueError("usernames character long max be fifteen character")
+                    elif len(name) <= 0:
+                        raise ValueError("please enter an username correctly")
+                    
+                except ValueError as error:
+                    print(error)
+                else:
+                    return name
+        user_name = name_taker()
+
+        def choice_taker():
+            while True:
+                try:
+                    choices = ["following","followers"]
+                    choice = input(f"1){choices[0]} \n2){choices[1]} \nwhich one(number): ")
+                    if choice !="1" and choice != "2":
+                        raise ValueError("please enter a choice correctly")
+                except ValueError as error:
+                    print(error)
+
+                else:
+                    return choice
+        choice = choice_taker()
+
+        def count_taker() -> int:
+            while True:
+                try:
+                    count = int(input("enter a count: "))
+                    if count > 1000 or count < 0:
+                        raise OverflowError("app does not bring that much user")
+
+                except ValueError:
+                    print("please enter a count correctly")
+                except OverflowError as error:
+                    print(error)
+                else:
+                    return count 
+        count = count_taker()
+
 
         #* url making and entering 
-        if choice == "following":
-            new_url = self.main_url + user_name + "/" + choice
+        if choice == "1":
+            new_url = self.main_url + user_name + "/" + "following"
             
-        elif choice == "followers":
-            new_url = self.main_url + user_name + "/" + choice
+        elif choice == "2":
+            new_url = self.main_url + user_name + "/" + "followers"
         
         self.driver.get(new_url)
         time.sleep(6)
@@ -138,15 +183,31 @@ class bot:
             follow_list = inner()
             return follow_list
 
-    def user_search(self,name) -> dict:
+    def user_search(self) -> dict:
         if not self.is_log_in :
             raise Exception("bot did not log in")
         
         #*return to main page
         self.driver.get(self.main_url)
 
-        #*data sending to search input
+        #*username taking
+        def name_taker() -> str:
+            while True:
+                try:
+                    name = input("enter an username: ").strip(" ")
+                    if len(name) > 15:
+                        raise ValueError("usernames character long max be fifteen character")
+                    elif len(name) <= 0:
+                        raise ValueError("please enter an username correctly")
+                    
+                except ValueError as error:
+                    print(error)
+                else:
+                    return name
+        name = name_taker()
         time.sleep(1.5)
+
+        #*data sending to search input
         inp_tag = self.driver.find_element(By.XPATH , "//input[@data-testid='SearchBox_Search_Input']")
         inp_tag.send_keys(f"#{name}")
         inp_tag.send_keys(Keys.ENTER)
@@ -172,13 +233,43 @@ class bot:
             users.update({username_span.text : url_a_tag.get_attribute("href")})
         return users
 
-    def search_tweet(self,topic:str,count:int) -> dict:
+    def search_tweet(self) -> dict:
         if self.is_log_in == False:
             raise Exception("bot did not log in")
         
         #*return to main page
         self.driver.get(self.main_url)
         time.sleep(1.5)
+        
+        #* topic and tweet count taking
+        def topic_taker() -> str:
+            while True:
+                try:
+                    topic = input("what will search: ").lower().strip(" ")
+                    if topic == "":
+                        raise ValueError("please enter a topic")
+                except ValueError as error:
+                    print(error)
+                else:
+                    return topic
+        topic = topic_taker()
+
+        def count_taker() -> int:
+            while True:
+                try:
+                    count = int(input("enter a count: "))
+                    if count > 1000 or count < 0:
+                        raise OverflowError("app does not bring that much tweet")
+
+                except ValueError:
+                    print("please enter a count correctly")
+                except OverflowError as error:
+                    print(error)
+                else:
+                    return count        
+        count = count_taker()
+
+
 
         #* searching the topic with hashtag
         inp_tag = self.driver.find_element(By.XPATH ,"//input[@data-testid='SearchBox_Search_Input']")
@@ -208,7 +299,7 @@ class bot:
             scroling = self.driver.execute_script(f"window.scrollTo(0,{first_height})")
 
             last_height =  self.driver.execute_script("return document.scrollingElement.scrollHeight")
-            print(last_height)
+
             if last_height == first_height:
                 raise ValueError("all tweets are appeared")
             
@@ -235,7 +326,7 @@ class bot:
             if len(last_list) == count:
                 return last_list
         
-    def daily_tweets(self):
+    def daily_tweets(self) -> None:
         if not self.is_log_in:
             raise Exception("bot did not log in")
         
@@ -284,7 +375,7 @@ class bot:
                 new_tweets = inner()
                 print(new_tweets)
         
-    def ask_grok(self):
+    def ask_grok(self) -> None:
         if not self.is_log_in:
             raise Exception("bot did not log in")
 
@@ -357,14 +448,16 @@ first_bot.log_in()
 time.sleep(4.5)
 
 #* user follower or follows getting
-# liste = first_bot.follows_or_followers(user_name="Ebonivonn",choice="following")
+liste = first_bot.follows_or_followers()
+print(len(liste))
+print(liste)
 
 #* user searching
-# users = first_bot.user_search(name="ebo")
+# users = first_bot.user_search()
 # print(users)
 
 #* tweet searching
-# tweets = first_bot.search_tweet(topic = "john wick" ,count = 20)
+# tweets = first_bot.search_tweet()
 # print(tweets)
 # print(len(tweets))
 
@@ -372,7 +465,7 @@ time.sleep(4.5)
 # daily_tweets = first_bot.daily_tweets()
 
 #* asking to grok ai
-first_bot.ask_grok()
+# first_bot.ask_grok()
 
 
 time.sleep(1000)
