@@ -365,7 +365,7 @@ class bot:
                     return user_choice
         
         tweets = inner()
-        writer_func(tweets)
+        writer_func(dict_data = tweets)
         
         while True:
             if user_choice_getting() == "n":
@@ -374,8 +374,7 @@ class bot:
                 scroller()
                 new_tweets = inner()
                 writer_func(new_tweets)
-
-        
+  
     def ask_grok(self) -> str:
         if not self.is_log_in:
             raise Exception("bot did not log in")
@@ -438,10 +437,7 @@ class bot:
             else:
                 return answer
 
-
-    #* grok limiti doldu 2 saat sonra tekrar gel        
-
-        
+    
 
 # first_bot = bot(email= "tanrininkirbaci36@gmail.com", password= "watchdogs.2007-2025//musty", username= "x_bot_1")
 
@@ -482,5 +478,10 @@ class bot:
 - followers - follows 
 - daily tweets
 - maybe grok question
-
+- Log out
 """
+
+#* kullanıcı log in dediği zaman ilk önce json dosyasını kontrol edicez. 
+#* eğerki json dosyasında active profile dolu ise o zaman zaten hesap var dicez.
+#* 
+
