@@ -326,7 +326,7 @@ class bot:
             if len(last_list) == count:
                 return last_list
         
-    def daily_tweets(self) -> None:
+    def daily_tweets(self,writer_func) -> None:
         if not self.is_log_in:
             raise Exception("bot did not log in")
         
@@ -365,7 +365,7 @@ class bot:
                     return user_choice
         
         tweets = inner()
-        print(tweets)
+        writer_func(tweets)
         
         while True:
             if user_choice_getting() == "n":
@@ -373,7 +373,8 @@ class bot:
             else:
                 scroller()
                 new_tweets = inner()
-                print(new_tweets)
+                writer_func(new_tweets)
+
         
     def ask_grok(self) -> str:
         if not self.is_log_in:
@@ -442,10 +443,10 @@ class bot:
 
         
 
-first_bot = bot(email= "tanrininkirbaci36@gmail.com", password= "watchdogs.2007-2025//musty", username= "x_bot_1")
+# first_bot = bot(email= "tanrininkirbaci36@gmail.com", password= "watchdogs.2007-2025//musty", username= "x_bot_1")
 
-first_bot.log_in()
-time.sleep(4.5)
+# first_bot.log_in()
+# time.sleep(4.5)
 
 #* user follower or follows getting
 # liste = first_bot.follows_or_followers()
