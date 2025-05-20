@@ -34,7 +34,7 @@ ve bu kaydetme işlemi sonrası yine json dosyasındaki veriyi okuayak verileri 
 import os 
 import json as js
 from bot import bot
-
+import time
 
 def quit_taker():
     while True:
@@ -77,6 +77,17 @@ def json_folder_maker():
     else:
         inner(main_path)
 
+def save_deleter():
+    #*this function for log outing
+
+    data_file_path = main_path + "/json_files/user_datas.json"
+    with open(data_file_path,"r+",encoding="utf-8") as file:
+        datas = js.load(file)
+    datas["active_profile"] = None
+    with open( data_file_path  , "w" , encoding="utf-8") as file:
+        js.dump(datas ,file,indent=4,sort_keys=False)
+
+
 def user_data_taker():
     data_file_path = main_path + "/json_files/user_datas.json"
     temp_file_path = main_path + "/json_files/temp_file.txt"
@@ -115,11 +126,13 @@ def user_data_taker():
         raise Exception("already there is a user profile")
 #* panelde login seçeneği seçilirse bu fonksiyon çaışıcak
 #* hata da gelse gelmesede sonuç olarak user data json dosyası okunacak ve veriler bota gönderilecek
+#* ve bu json dosyasında active_profile varsa botun is_log_in attribute'u  True olucak.
+#* kullanıcıda zorunu olarak 
 
 
-user_data_taker()
-    
 
+# save_deleter()
+# user_data_taker()
 
 
 def data_writer(str_data = None , dict_data = None):

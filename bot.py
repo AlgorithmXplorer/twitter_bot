@@ -62,6 +62,7 @@ class bot:
     def follows_or_followers(self) -> dict:
         if not self.is_log_in:
             raise Exception("bot is still not logged in.")
+            raise Exception("bot is still not logged in.")
 
         #* name ,count and follower or following choice getting
         def name_taker() -> str:
@@ -193,6 +194,7 @@ class bot:
     def user_search(self) -> dict:
         if not self.is_log_in :
             raise Exception("bot is still not logged in.")
+            raise Exception("bot is still not logged in.")
         
         #*return to main page
         self.driver.get(self.main_url)
@@ -242,6 +244,7 @@ class bot:
 
     def search_tweet(self) -> dict:
         if self.is_log_in == False:
+            raise Exception("bot is still not logged in.")
             raise Exception("bot is still not logged in.")
         
         #*return to main page
@@ -336,6 +339,7 @@ class bot:
     def daily_tweets(self,writer_func) -> None:
         if not self.is_log_in:
             raise Exception("bot is still not logged in.")
+            raise Exception("bot is still not logged in.")
         
         self.driver.get(url= self.main_url)
         time.sleep(3)
@@ -384,6 +388,7 @@ class bot:
   
     def ask_grok(self) -> str:
         if not self.is_log_in:
+            raise Exception("bot is still not logged in.")
             raise Exception("bot is still not logged in.")
 
         self.driver.get(url = self.main_url)
@@ -444,10 +449,19 @@ class bot:
             else:
                 return answer
 
-    
+    def profile_details(self) -> str:
+        if not self.is_log_in:
+            raise Exception("bot is still not logged in.")
+        else:
+            return f"email: {self.email}\nusername: {self.username}\npassword: {self.password}"
 
-first_bot = bot(email= "tanrininkirbaci36@gmail.com", password= "watchdogs.2007-2025//musty", username= "x_bot_1")
-first_bot.log_in()
+    #* grok limiti doldu 2 saat sonra tekrar gel        
+
+        
+
+# first_bot = bot(email= "tanrininkirbaci36@gmail.com", password= "watchdogs.2007-2025//musty", username= "x_bot_1")
+# first_bot.log_in()
+
 # time.sleep(4.5)
 
 #* user follower or follows getting
@@ -485,6 +499,9 @@ first_bot.log_in()
 - daily tweets
 - maybe grok question
 - Log out
+- profile looking
+- log out
+
 """
 
 #* kullanıcı log in dediği zaman ilk önce json dosyasını kontrol edicez. 
