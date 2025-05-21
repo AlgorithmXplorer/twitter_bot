@@ -22,11 +22,12 @@ class bot:
         self.is_log_in = False
 
     def log_in(self):
+
         #* log in page opens
         log_in_url = self.main_url + "i/flow/login"
         self.driver.get(url = log_in_url)
         self.driver.maximize_window()
-        time.sleep(5)
+        time.sleep(10)
 
         #*username enters
         email_inp_tag = self.driver.find_element(By.XPATH, "//input[@autocomplete = 'username']") #* this input tag can get email username or number 
@@ -52,9 +53,9 @@ class bot:
         
         self.is_log_in = True
 
-    def log_out(self,json_data_dleter_func):
+    def log_out(self,json_data_deleter_func):
         if self.is_log_in:
-            json_data_dleter_func()
+            json_data_deleter_func()
             self.is_log_in = False
         else:
             raise Exception("bot is still not logged in.")
@@ -62,8 +63,7 @@ class bot:
     def follows_or_followers(self) -> dict:
         if not self.is_log_in:
             raise Exception("bot is still not logged in.")
-            raise Exception("bot is still not logged in.")
-
+      
         #* name ,count and follower or following choice getting
         def name_taker() -> str:
             while True:
@@ -194,8 +194,7 @@ class bot:
     def user_search(self) -> dict:
         if not self.is_log_in :
             raise Exception("bot is still not logged in.")
-            raise Exception("bot is still not logged in.")
-        
+         
         #*return to main page
         self.driver.get(self.main_url)
 
@@ -245,8 +244,7 @@ class bot:
     def search_tweet(self) -> dict:
         if self.is_log_in == False:
             raise Exception("bot is still not logged in.")
-            raise Exception("bot is still not logged in.")
-        
+         
         #*return to main page
         self.driver.get(self.main_url)
         time.sleep(1.5)
@@ -306,7 +304,8 @@ class bot:
         def scroll_func():
             first_height = self.driver.execute_script("return document.scrollingElement.scrollHeight")
             
-            scroling = self.driver.execute_script(f"window.scrollTo(0,{first_height})")
+            self.driver.execute_script(f"window.scrollTo(0,{first_height})")
+            time.sleep(3)
 
             last_height =  self.driver.execute_script("return document.scrollingElement.scrollHeight")
 
@@ -339,8 +338,7 @@ class bot:
     def daily_tweets(self,writer_func) -> None:
         if not self.is_log_in:
             raise Exception("bot is still not logged in.")
-            raise Exception("bot is still not logged in.")
-        
+           
         self.driver.get(url= self.main_url)
         time.sleep(3)
 
@@ -376,7 +374,7 @@ class bot:
                     return user_choice
         
         tweets = inner()
-        writer_func(dict_data = tweets)
+        writer_func(data = tweets)
         
         while True:
             if user_choice_getting() == "n":
@@ -384,13 +382,12 @@ class bot:
             else:
                 scroller()
                 new_tweets = inner()
-                writer_func(new_tweets)
+                writer_func(data=new_tweets)
   
     def ask_grok(self) -> str:
         if not self.is_log_in:
             raise Exception("bot is still not logged in.")
-            raise Exception("bot is still not logged in.")
-
+           
         self.driver.get(url = self.main_url)
         time.sleep(1.5)
 

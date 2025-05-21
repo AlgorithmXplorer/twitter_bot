@@ -1,42 +1,13 @@
 
-#region #todo user data geter function 
-#* kullancı username email ve şifre giricek. bu bilgileri geçici bir txt dosyası açıcaz ve oraya yazıcak
-#* yazılan bilgileri bir json dosyasına kaydedeğiz
-#* bu json dosyası içindeki dicti aşağıdaki gibi olucak.
-"""
-{
-"active_profile":None / {bilgiler}
-}
-"""
-#* kullanıcı bu işlemleri login dediği zaman olucak.
-#* bu data işlemleri bittikten sonra bota gereken bilgileri burda yazdığımız fonksiyon çıktı edicek
-
-#todo yani burda ayzılan fonksiyonun amacı:
-"""
-kullanıcı login dediği ilk önce dataları yazdığımız json dosyasına bakıcak
-eğerki active profile None ise bir txt dosyası çalıştıracak ve bilgileri alıcak. ayrıca txt dosyasında not olarak işi bittiğinde terminale q girmesini isteyeceğiz.
-bilgileri aldıktan dosya silinecek ve json dosyasına kaydedecek
-ve bu kaydetme işlemi sonrası yine json dosyasındaki veriyi okuayak verileri bota gönderecek.
-"""
-#endregion
-
-#region #* data writer
-#* bottan alınan tüm veriler anlık olarak txt dosyalarında gösteren bir fonksiyon olucak
-#* bu fonksiyon aldığı bir dicti yada listeyi anlık olarak bir txt dosyasına yazıcak ve txt dosyasında not olarak işi bittiğinde terminale q giilmesi istenecek.
-#* botun her bir fonksiyonun çıktısı bu txt dosyasına datayı yazdıran fonksiyon ile olucak
-
-#todo yani oluşturulcak bu fonksyion bot tarafından aldığı verileri anlık olarak bir txt dosyasında gösterecek
-#endregion
-
-#todo daily tweet bringer fonksiyonu direk parametre olarak alarak kendi içinde yazdırıcak
 
 
 import os 
 import json as js
 from bot import bot
 import time
+main_path = os.getcwd()
 
-def quit_taker():
+def quit_taker() -> None:
     while True:
         try:
             inp = input("///:").strip(" ").lower()
@@ -49,16 +20,13 @@ def quit_taker():
         else:
             break
 
-main_path = os.getcwd()
 
-def json_folder_maker():
+def json_folder_maker() -> None:
     #* this function first checks is there a folder . if there is a folder then the function just skips
     #! BUT THERE İS NOT A FOLDRER THEN:
     #* creates a folder. and creates two file in this folder.
     #* first one of created files for Temporary file second one for user datas
     #* first file is txt file second is json 
-
-   
 
     def inner(path):
         #* folder maing
@@ -77,7 +45,7 @@ def json_folder_maker():
     else:
         inner(main_path)
 
-def save_deleter():
+def save_deleter() -> None:
     #*this function for log outing
 
     data_file_path = main_path + "/json_files/user_datas.json"
@@ -101,14 +69,15 @@ def user_data_taker():
             try:
                 #* user datas taking
                 with open(temp_file_path ,"w",encoding="utf-8") as file:
-                    file.write("username: \nemail: \npassword: \n\n\nwhen you have finished then press ctrl+s after close the temp_file and write 'q' into the terminal" )
+                    file.write("NOTE: when you have finished then press ctrl+s after close the temp_file and write 'q' into the terminal\n\n\n")
+                    file.write("username: \nemail: \npassword: " )
                 os.system(temp_file_path)
                 quit_taker()
 
                 
                 #* user datas saving
                 with open(temp_file_path ,"r+",encoding="utf-8") as file:
-                    lines = file.readlines()[:3]
+                    lines = file.readlines()[-3:]
 
                 username = lines[0].split(": ")[1].strip(" ").strip("\n")
                 email = lines[1].split(": ")[1].strip(" ").strip("\n")
@@ -124,23 +93,43 @@ def user_data_taker():
                 break
     else:
         raise Exception("already there is a user profile")
-#* panelde login seçeneği seçilirse bu fonksiyon çaışıcak
-#* hata da gelse gelmesede sonuç olarak user data json dosyası okunacak ve veriler bota gönderilecek
-#* ve bu json dosyasında active_profile varsa botun is_log_in attribute'u  True olucak.
-#* kullanıcıda zorunu olarak 
+
+def user_data_reader() ->list:
+    data_file_path = main_path + "/json_files/user_datas.json"
+    with open(data_file_path , "r+", encoding="utf-8") as file:
+        datas = js.load(file)["active_profile"]
+        
+    return  [datas["username"],datas["email"],datas["password"]]
 
 
+def data_writer(data) -> None:
 
-# save_deleter()
-# user_data_taker()
+    temp_file_path = main_path + "/json_files/temp_file.txt"
+
+    if type(data) == str:
+
+        with open(temp_file_path,"w",encoding="utf8") as file:
+            file.write("NOTE: when you have finished then close the temp_file and write 'q' into the terminal\n\n")
+            file.write("RESULT:\n")
+            file.write(data + "\n")
+        
+        os.system(temp_file_path)
+        quit_taker()            
+
+    elif type(data) == dict:
+        shaped_data = js.dumps(data,indent=4,sort_keys=False)
+        with open(temp_file_path,"w",encoding="utf-8") as file:
+            file.write("when you have finished then close the temp_file and write 'q' into the terminal\n\n")
+            file.write("RESULT:\n")
+            file.write(shaped_data)
+            
+        
+        os.system(temp_file_path)
+        quit_taker()            
+
+# x_bot = bot(username = datas[0] ,email = datas[1] , password=datas[2])
+# x_bot.log_in()
+# time.sleep(10)
 
 
-def data_writer(str_data = None , dict_data = None):
-    #* eğerki gelen veri dicti ise ilk önce json modülü ile indent verilir ardından txt dosyasına yazdırılır
-    #* gelen veri str ise direk txt dosyasına yazdırılacak
-
-    pass
-
-
-# x_bot = bot()
-
+#* first use try except block for functions because sometimes functions send error message. and this mesages should write to temp file
