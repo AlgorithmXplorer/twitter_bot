@@ -90,7 +90,7 @@ def user_data_taker():
             else:
                 break
     else:
-        raise Exception("already there is a user profile")
+        raise Exception("already there is a user profile in the database")
 
 def user_data_reader() -> list:
     data_file_path = main_path + "/json_files/user_datas.json"

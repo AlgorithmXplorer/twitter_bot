@@ -36,11 +36,12 @@ class PANEL:
                 print("\n",error,"\n")
             else:
                 break
+
         if inp == "1":
             self.Log_in()
         
         elif inp == "2":
-            self.Log_out
+            self.Log_out()
 
         elif inp == "3":
             self.profile_dtl()
@@ -59,32 +60,76 @@ class PANEL:
 
         elif inp == "8":
             self.asking_ai()
-            
+
 
 
     def Log_in(self):
-        pass
-    
+        if self.bot != None:
+            print("\nbot is already logged in\n")
+            self.panel()
+
+        try:
+            file_manager.user_data_taker()
+        except Exception as error:
+            print(error)
+
+        user_datas = file_manager.user_data_reader()
+        time.sleep(3)
+
+        self.bot = bot(username=user_datas[0], email= user_datas[1], password= user_datas[2])
+        
+        self.bot.log_in()
+
+        self.panel()
+
+
     def Log_out(self):
-        pass
+        if self.bot == None:
+            print("\nplease first log in\n")
+            self.panel()
+        else:
+            try:
+                self.bot.log_out(file_manager.save_deleter)
+            except Exception as error:
+                print(error)
+        print("The app is log out")
+
     
     def profile_dtl(self):
-        pass
+        if self.bot == None:
+            print("\nplease first log in\n")
+            self.panel()
+        
     
     def user_srch(self):
-        pass
+        if self.bot == None:
+            print("\nplease first log in\n")
+            self.panel()
+        
     
     def flw_flws(self):
-        pass
+        if self.bot == None:
+            print("\nplease first log in\n")
+            self.panel()
+        
 
     def tweet_search(self):
-        pass
+        if self.bot == None:
+            print("\nplease first log in\n")
+            self.panel()
+        
 
     def daily_twet(self):
-        pass
+        if self.bot == None:
+            print("\nplease first log in\n")
+            self.panel()
+        
 
     def asking_ai(self):
-        pass
+        if self.bot == None:
+            print("\nplease first log in\n")
+            self.panel()
+        
 
 a = PANEL(choice_list=["Log in","Log out","Profile detail","User search","Following or Follower list","Tweet search","Daily tweets","Asking to grok ai"])
 a.panel()
