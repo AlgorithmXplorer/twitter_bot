@@ -20,7 +20,6 @@ def quit_taker() -> None:
         else:
             break
 
-
 def json_folder_maker() -> None:
     #* this function first checks is there a folder . if there is a folder then the function just skips
     #! BUT THERE İS NOT A FOLDRER THEN:
@@ -54,7 +53,6 @@ def save_deleter() -> None:
     datas["active_profile"] = None
     with open( data_file_path  , "w" , encoding="utf-8") as file:
         js.dump(datas ,file,indent=4,sort_keys=False)
-
 
 def user_data_taker():
     data_file_path = main_path + "/json_files/user_datas.json"
@@ -94,13 +92,12 @@ def user_data_taker():
     else:
         raise Exception("already there is a user profile")
 
-def user_data_reader() ->list:
+def user_data_reader() -> list:
     data_file_path = main_path + "/json_files/user_datas.json"
     with open(data_file_path , "r+", encoding="utf-8") as file:
         datas = js.load(file)["active_profile"]
         
     return  [datas["username"],datas["email"],datas["password"]]
-
 
 def data_writer(data) -> None:
 
