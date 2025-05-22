@@ -286,7 +286,7 @@ class bot:
                 text_span_tags =text_div.find_elements(By.CSS_SELECTOR , ".css-1jxf684.r-bcqeeo.r-1ttztb7.r-qvutc0.r-poiln3")
                 text = "  //  ".join([ span.text for span in text_span_tags if len(span.text) >2])
                 
-                #* the user who owns tweet
+                #* the owner of that tweet
                 username = name_div.find_element(By.CSS_SELECTOR , ".css-1jxf684.r-bcqeeo.r-1ttztb7.r-qvutc0.r-poiln3")
                 
                 tweets.update({username.text : text})

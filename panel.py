@@ -14,7 +14,7 @@
 import time
 import bot
 import file_manager
-import os
+
 file_manager.json_folder_maker()
 
 
@@ -96,8 +96,7 @@ class PANEL:
         else:
             self.bot.log_out(file_manager.save_deleter)
             print("The app is log out")
-        
-              
+                    
     def profile_dtl(self):
         if not self.is_log_in:
             print("\nplease first log in\n")
@@ -152,6 +151,19 @@ class PANEL:
         if not self.is_log_in:
             print("\nplease first log in\n")
             self.panel()
+
+        try:
+            datas = self.bot.search_tweet()
+        except Exception as error:
+            if len(str(error)) > 50:
+                print("There is a error happend. Please try it few miuntes later")
+                self.panel()
+            else:
+                print(error)
+                self.panel()
+        else:
+            file_manager.data_writer(data= datas)
+            self.panel()
         
     def daily_twet(self):
         if not self.is_log_in:
@@ -163,7 +175,7 @@ class PANEL:
             print("\nplease first log in\n")
             self.panel()
         
-
+#todo en son log out denildiğinde sürekli log in çalışıyor
 a = PANEL(choice_list=["Log in","Log out","Profile detail","User search","Following or Follower list","Tweet search","Daily tweets","Asking to grok ai"])
 a.panel()
 
