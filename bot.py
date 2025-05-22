@@ -146,49 +146,40 @@ class bot:
         
         #* if count data doesn't come then just inner function works
         #* but if there is a count data then app scrolls with twitter scrollbar
-        if count != None:
-            follow_list = inner()
+        
+        follow_list = inner()
+        
+        while True:
+            #* scrolling with java code
+            scroll_height = self.driver.execute_script("return document.documentElement.scrollHeight")
+            self.driver.execute_script(f"window.scrollTo(0,{scroll_height})")
+            last_height = self.driver.execute_script("return document.documentElement.scrollHeight")
             
-            while True:
-
-                #* scrolling with java code
-                scroll_height = self.driver.execute_script("return document.documentElement.scrollHeight")
-                self.driver.execute_script(f"window.scrollTo(0,{scroll_height})")
-                last_height = self.driver.execute_script("return document.documentElement.scrollHeight")
-
-                #* take the new user datas to follow_list (user data update)  
-                new_list = inner()        
-                follow_list.update(new_list)
-
-                list_count = len(follow_list)
+            #* take the new user datas to follow_list (user data update)  
+            new_list = inner()        
+            follow_list.update(new_list)
+            list_count = len(follow_list)
+            
+            #* loop controls
+            if list_count >= count:
+                break
+                            
+            if last_height == scroll_height:
+                if list_count < count:
+                    raise Exception("there are not that many users")
                 
-                #* loop controls
-                if list_count >= count:
-                    break
-                                
-                if last_height == scroll_height:
-                    if list_count < count:
-                        raise Exception("there are not that many users")
-                    
-                time.sleep(3)
-
-
-            #*slicing 
-            result = {}
-            i=1
-            for name,url in follow_list.items():
-                result.update({name:url})
+            time.sleep(3)
+        #*slicing 
+        result = {}
+        i=1
+        for name,url in follow_list.items():
+            result.update({name:url})
+            
+            if i == count:
+                break
+            i+=1
+        return result
                 
-                if i == count:
-                    break
-                i+=1
-
-            return result
-                
-        else:
-            follow_list = inner()
-            return follow_list
-
     def user_search(self) -> dict:
         if not self.is_log_in :
             raise Exception("\nbot is still not logged in.\n")
@@ -228,14 +219,16 @@ class bot:
         #* Retrieving users
         all_user_div_tags = self.driver.find_elements(By.XPATH ,"//div[@data-testid='cellInnerDiv']")
         users = {}
-        
-        for div_tag in all_user_div_tags:
-            #* Retrieving username 
-            username_span = div_tag.find_element(By.CSS_SELECTOR , ".css-1jxf684.r-bcqeeo.r-1ttztb7.r-qvutc0.r-poiln3")
 
-            #* Retrieving user url 
-            url_a_tag =div_tag.find_element(By.CSS_SELECTOR , ".css-175oi2r.r-1wbh5a2.r-dnmrzs.r-1ny4l3l.r-1loqt21")
+        for  div_tag in all_user_div_tags:
+            try:
+                #* Retrieving username 
+                username_span = div_tag.find_element(By.CSS_SELECTOR , ".css-1jxf684.r-dnmrzs.r-1udh08x.r-1udbk01.r-3s2u2q.r-bcqeeo.r-1ttztb7.r-qvutc0.r-poiln3")
 
+                #* Retrieving user url 
+                url_a_tag =div_tag.find_element(By.CSS_SELECTOR , ".css-175oi2r.r-1wbh5a2.r-dnmrzs.r-1ny4l3l.r-1loqt21")
+            except:
+                continue    
             users.update({username_span.text : url_a_tag.get_attribute("href")})
         return users
 
@@ -449,10 +442,6 @@ class bot:
             raise Exception("\nbot is still not logged in.\n")
         else:
             return f"email: {self.email}\nusername: {self.username}\npassword: {self.password}"
-
-    #* grok limiti doldu 2 saat sonra tekrar gel        
-
-        
 
 # first_bot = bot(email= "tanrininkirbaci36@gmail.com", password= "watchdogs.2007-2025//musty", username= "x_bot_1")
 # first_bot.log_in()

@@ -14,7 +14,7 @@
 import time
 import bot
 import file_manager
-
+import os
 file_manager.json_folder_maker()
 
 
@@ -23,6 +23,7 @@ class PANEL:
     def __init__(self,choice_list:list):
         self.choices = choice_list        
         self.bot = None
+        self.is_log_in = None
 
     def panel(self):
         while True:
@@ -77,7 +78,8 @@ class PANEL:
         time.sleep(3)
 
         self.bot = bot.bot(username=user_datas[0], email= user_datas[1], password= user_datas[2])
-        
+        self.is_log_in = True
+
         #* if there a problem about driver then the app warns to the user
         try:
             self.bot.log_in()
@@ -88,7 +90,7 @@ class PANEL:
         self.panel()
 
     def Log_out(self):
-        if self.bot == None:
+        if not self.is_log_in:
             print("\nplease first log in\n")
             self.panel()
         else:
@@ -97,7 +99,7 @@ class PANEL:
         
               
     def profile_dtl(self):
-        if self.bot == None:
+        if not self.is_log_in:
             print("\nplease first log in\n")
             self.panel()
         
@@ -109,10 +111,9 @@ class PANEL:
             print(error)
         
         self.panel()
-        
     
     def user_srch(self):
-        if self.bot == None:
+        if not self.is_log_in:
             print("\nplease first log in\n")
             self.panel()
         
@@ -122,30 +123,43 @@ class PANEL:
             if len(str(error)) > 50:
                 print("There is a error happend. Please try it few miuntes later")
                 self.panel()
+            else:
+                print(error)
+                self.panel()
         else:    
             file_manager.data_writer(datas)
             self.panel()
     
     def flw_flws(self):
-        if self.bot == None:
+        if not self.is_log_in:
             print("\nplease first log in\n")
             self.panel()
         
-
+        try:
+            datas = self.bot.follows_or_followers()
+        except Exception as error:
+            if len(str(error)) > 50:
+                print("There is a error happend. Please try it few miuntes later")
+                self.panel()
+            else:
+                print(error)
+                self.panel()
+        else:
+            file_manager.data_writer(data = datas)
+            self.panel()
+        
     def tweet_search(self):
-        if self.bot == None:
+        if not self.is_log_in:
             print("\nplease first log in\n")
             self.panel()
         
-
     def daily_twet(self):
-        if self.bot == None:
+        if not self.is_log_in:
             print("\nplease first log in\n")
             self.panel()
         
-
     def asking_ai(self):
-        if self.bot == None:
+        if not self.is_log_in:
             print("\nplease first log in\n")
             self.panel()
         
