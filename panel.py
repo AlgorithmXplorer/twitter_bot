@@ -12,7 +12,7 @@
     8- grok yapay zekasına soru sorma
 """
 import time
-from bot import bot
+import bot
 import file_manager
 
 file_manager.json_folder_maker()
@@ -76,29 +76,39 @@ class PANEL:
         user_datas = file_manager.user_data_reader()
         time.sleep(3)
 
-        self.bot = bot(username=user_datas[0], email= user_datas[1], password= user_datas[2])
+        self.bot = bot.bot(username=user_datas[0], email= user_datas[1], password= user_datas[2])
         
-        self.bot.log_in()
-
+        #* if there a problem about driver then the app warns to the user
+        try:
+            self.bot.log_in()
+        except Exception as error:
+            if len(str(error)) > 50:
+                print("There is a error happend. Please try it later")
+            
         self.panel()
-
 
     def Log_out(self):
         if self.bot == None:
             print("\nplease first log in\n")
             self.panel()
         else:
-            try:
-                self.bot.log_out(file_manager.save_deleter)
-            except Exception as error:
-                print(error)
-        print("The app is log out")
-
-    
+            self.bot.log_out(file_manager.save_deleter)
+            print("The app is log out")
+        
+              
     def profile_dtl(self):
         if self.bot == None:
             print("\nplease first log in\n")
             self.panel()
+        
+        try:
+            detail = self.bot.profile_details()
+            file_manager.data_writer(detail)
+
+        except Exception as error:
+            print(error)
+        
+        self.panel()
         
     
     def user_srch(self):
@@ -106,6 +116,15 @@ class PANEL:
             print("\nplease first log in\n")
             self.panel()
         
+        try:
+            datas = self.bot.user_search()
+        except Exception as error:
+            if len(str(error)) > 50:
+                print("There is a error happend. Please try it few miuntes later")
+                self.panel()
+        else:    
+            file_manager.data_writer(datas)
+            self.panel()
     
     def flw_flws(self):
         if self.bot == None:

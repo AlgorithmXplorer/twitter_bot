@@ -124,9 +124,7 @@ def data_writer(data) -> None:
         os.system(temp_file_path)
         quit_taker()            
 
-# x_bot = bot(username = datas[0] ,email = datas[1] , password=datas[2])
-# x_bot.log_in()
-# time.sleep(10)
+
 
 
 #* first use try except block for functions because sometimes functions send error message. and this mesages should write to temp file

@@ -54,12 +54,10 @@ class bot:
         self.is_log_in = True
 
     def log_out(self,json_data_deleter_func):
-        if self.is_log_in:
-            json_data_deleter_func()
-            self.is_log_in = False
-        else:
-            raise Exception("\nbot is still not logged in.\n")
-
+        json_data_deleter_func()
+        self.is_log_in = False
+        self.driver.close()
+        
     def follows_or_followers(self) -> dict:
         if not self.is_log_in:
             raise Exception("\nbot is still not logged in.\n")
