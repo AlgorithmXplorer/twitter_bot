@@ -169,10 +169,36 @@ class PANEL:
         if not self.is_log_in:
             print("\nplease first log in\n")
             self.panel()
+        try:
+            self.bot.daily_tweets(writer_func = file_manager.data_writer)
+        except Exception as error:
+            if len(str(error)) > 50:
+                print("There is a error happend. Please try it few miuntes later")
+                self.panel()
+            else:
+                print(error)
+                self.panel()
+        else:
+            self.panel()
+
+
         
     def asking_ai(self):
         if not self.is_log_in:
             print("\nplease first log in\n")
+            self.panel()
+
+        try:
+            datas = self.bot.ask_grok()
+        except Exception as error:
+            if len(str(error)) > 50:
+                print("There is a error happend. Please try it few miuntes later")
+                self.panel()
+            else:
+                print(error)
+                self.panel()
+        else:
+            file_manager.data_writer(datas)
             self.panel()
         
 #todo en son log out denildiğinde sürekli log in çalışıyor

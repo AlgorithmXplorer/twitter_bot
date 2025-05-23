@@ -124,7 +124,3 @@ def data_writer(data) -> None:
         os.system(temp_file_path)
         quit_taker()            
 
-
-
-
-#* first use try except block for functions because sometimes functions send error message. and this mesages should write to temp file
