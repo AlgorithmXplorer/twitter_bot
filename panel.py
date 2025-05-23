@@ -23,7 +23,6 @@ class PANEL:
     def __init__(self,choice_list:list):
         self.choices = choice_list        
         self.bot = None
-        self.is_log_in = None
 
     def panel(self):
         while True:
@@ -63,11 +62,11 @@ class PANEL:
             self.asking_ai()
 
 
-
     def Log_in(self):
-        if self.bot != None:
+        if self.bot !=None:
             print("\nbot is already logged in\n")
             self.panel()
+        
 
         try:
             file_manager.user_data_taker()
@@ -90,15 +89,16 @@ class PANEL:
         self.panel()
 
     def Log_out(self):
-        if not self.is_log_in:
+        if self.bot == None:
             print("\nplease first log in\n")
             self.panel()
         else:
-            self.bot.log_out(file_manager.save_deleter)
+            self.bot.driver.close()
+            file_manager.save_deleter()
             print("The app is log out")
                     
     def profile_dtl(self):
-        if not self.is_log_in:
+        if self.bot == None:
             print("\nplease first log in\n")
             self.panel()
         
@@ -112,7 +112,7 @@ class PANEL:
         self.panel()
     
     def user_srch(self):
-        if not self.is_log_in:
+        if self.bot == None:
             print("\nplease first log in\n")
             self.panel()
         
@@ -130,7 +130,7 @@ class PANEL:
             self.panel()
     
     def flw_flws(self):
-        if not self.is_log_in:
+        if self.bot == None:
             print("\nplease first log in\n")
             self.panel()
         
@@ -148,7 +148,7 @@ class PANEL:
             self.panel()
         
     def tweet_search(self):
-        if not self.is_log_in:
+        if self.bot == None:
             print("\nplease first log in\n")
             self.panel()
 
@@ -166,7 +166,7 @@ class PANEL:
             self.panel()
         
     def daily_twet(self):
-        if not self.is_log_in:
+        if self.bot == None:
             print("\nplease first log in\n")
             self.panel()
         try:
@@ -180,11 +180,9 @@ class PANEL:
                 self.panel()
         else:
             self.panel()
-
-
         
     def asking_ai(self):
-        if not self.is_log_in:
+        if self.bot == None:
             print("\nplease first log in\n")
             self.panel()
 

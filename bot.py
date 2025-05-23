@@ -21,7 +21,7 @@ class bot:
         self.password = password
         self.is_log_in = False
 
-    def log_in(self):
+    def log_in(self) ->None:
 
         #* log in page opens
         log_in_url = self.main_url + "i/flow/login"
@@ -52,16 +52,9 @@ class bot:
         time.sleep(1.5)
         
         self.is_log_in = True
-
-    def log_out(self,json_data_deleter_func):
-        json_data_deleter_func()
-        self.is_log_in = False
-        self.driver.close()
-        
+  
     def follows_or_followers(self) -> dict:
-        if not self.is_log_in:
-            raise Exception("\nbot is still not logged in.\n")
-      
+ 
         #* name ,count and follower or following choice getting
         def name_taker() -> str:
             while True:
@@ -181,9 +174,7 @@ class bot:
         return result
                 
     def user_search(self) -> dict:
-        if not self.is_log_in :
-            raise Exception("\nbot is still not logged in.\n")
-         
+
         #*return to main page
         self.driver.get(self.main_url)
 
@@ -233,9 +224,7 @@ class bot:
         return users
 
     def search_tweet(self) -> dict:
-        if self.is_log_in == False:
-            raise Exception("\nbot is still not logged in.\n")
-         
+
         #*return to main page
         self.driver.get(self.main_url)
         time.sleep(1.5)
@@ -327,9 +316,7 @@ class bot:
                 return last_list
         
     def daily_tweets(self,writer_func) -> None:
-        if not self.is_log_in:
-            raise Exception("\nbot is still not logged in.\n")
-           
+
         self.driver.get(url= self.main_url)
         time.sleep(3)
 
@@ -376,9 +363,7 @@ class bot:
                 writer_func(data=new_tweets)
   
     def ask_grok(self) -> str:
-        if not self.is_log_in:
-            raise Exception("\nbot is still not logged in.\n")
-           
+
         self.driver.get(url = self.main_url)
         time.sleep(1.5)
 
@@ -438,9 +423,6 @@ class bot:
                 return answer
 
     def profile_details(self) -> str:
-        if not self.is_log_in:
-            raise Exception("\nbot is still not logged in.\n")
-        else:
-            return f"email: {self.email}\nusername: {self.username}\npassword: {self.password}"
+        return f"email: {self.email}\nusername: {self.username}\npassword: {self.password}"
 
 
