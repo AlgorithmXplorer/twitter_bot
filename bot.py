@@ -423,6 +423,7 @@ class bot:
                 return answer
 
     def profile_details(self) -> str:
+        #* if the user wants take a look at the the profil
         return f"email: {self.email}\nusername: {self.username}\npassword: {self.password}"
 
 

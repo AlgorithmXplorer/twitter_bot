@@ -1,13 +1,11 @@
 
 
-
 import os 
 import json as js
-from bot import bot
-import time
 main_path = os.getcwd()
 
 def quit_taker() -> None:
+    
     while True:
         try:
             inp = input("///:").strip(" ").lower()
@@ -55,6 +53,11 @@ def save_deleter() -> None:
         js.dump(datas ,file,indent=4,sort_keys=False)
 
 def user_data_taker():
+    #* this function gets the user datas with a tempory file.
+    #* when user enter his/her datas to temp file then this function read the file
+    #* and saves the data to the json file
+    #! AFTER THİS FUNCTİON THE QUİT_TAKER FUNCTİON MUST BE USE BECAUSE THE PROGRAM DOESNT KNOW WHEN USER FİNİSH ENTERİNG
+
     data_file_path = main_path + "/json_files/user_datas.json"
     temp_file_path = main_path + "/json_files/temp_file.txt"
 
@@ -93,6 +96,8 @@ def user_data_taker():
         raise Exception("already there is a user profile in the database")
 
 def user_data_reader() -> list:
+    #* this function reads the json file for log in 
+
     data_file_path = main_path + "/json_files/user_datas.json"
     with open(data_file_path , "r+", encoding="utf-8") as file:
         datas = js.load(file)["active_profile"]
@@ -100,6 +105,8 @@ def user_data_reader() -> list:
     return  [datas["username"],datas["email"],datas["password"]]
 
 def data_writer(data) -> None:
+    #* this function for datas of bot class's functions writing.
+    #* when some datas (like tweet list) comes then the function writes the datas in the temp file and open this temp file
 
     temp_file_path = main_path + "/json_files/temp_file.txt"
 
