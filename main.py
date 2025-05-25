@@ -67,8 +67,11 @@ class PANEL:
         except Exception as error:
             print(error)
 
-        #* the datas of saved to the file are getting 
-        user_datas = file_manager.user_data_reader()
+        #* the datas of saved to the file are getting
+        try:
+            user_datas = file_manager.user_data_reader()
+        except :
+            print("there is a problem about app. please log in again")
         time.sleep(3)
 
         #* bot is creating 
