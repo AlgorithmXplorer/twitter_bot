@@ -19,10 +19,10 @@ This project serves as an example of how to use the Selenium module.It doesn’t
 
 But if you need or want an exe file then follow these steps:
 1. insttal pyinstaller moddule from [PyPİ](https://pypi.org/)
-    ![Logo](downloads/a.png)
+    ![Logo](a.png)
     <br/>
 2. Open the Console and enter this code 
-    ![Logo](downloads/b.png)
+    ![Logo](b.png)
     <br/>
 3. A folder named dist will be created and our exe file will be in this folder
 
