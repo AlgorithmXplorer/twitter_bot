@@ -137,8 +137,6 @@ class bot:
             
             return inner_follow_list
         
-        #* if count data doesn't come then just inner function works
-        #* but if there is a count data then app scrolls with twitter scrollbar
         
         follow_list = inner()
         
@@ -354,6 +352,7 @@ class bot:
         tweets = inner()
         writer_func(data = tweets)
         
+        #* asking to user for more daily tweets
         while True:
             if user_choice_getting() == "n":
                 break
