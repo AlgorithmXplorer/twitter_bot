@@ -2,7 +2,6 @@
 
 import os 
 import json as js
-main_path = os.getcwd()
 
 def quit_taker() -> None:
     
@@ -72,7 +71,7 @@ def user_data_taker():
                 with open(temp_file_path ,"w",encoding="utf-8") as file:
                     file.write("NOTE: when you have finished then press ctrl+s after close the temp_file and write 'q' into the terminal\n\n\n")
                     file.write("username: \nemail: \npassword: " )
-                os.system(temp_file_path)
+                os.system(f"notepad {temp_file_path}")
                 quit_taker()
 
                 
@@ -117,7 +116,7 @@ def data_writer(data) -> None:
             file.write("RESULT:\n")
             file.write(data + "\n")
         
-        os.system(temp_file_path)
+        os.system(f"notepad {temp_file_path}")
         quit_taker()            
 
     elif type(data) == dict:
@@ -128,6 +127,10 @@ def data_writer(data) -> None:
             file.write(shaped_data)
             
         
-        os.system(temp_file_path)
+        os.system(f"notepad {temp_file_path}")
         quit_taker()            
+
+
+main_path = os.getcwd()
+json_folder_maker()
 

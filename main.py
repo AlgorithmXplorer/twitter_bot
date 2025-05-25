@@ -207,7 +207,6 @@ class PANEL:
 #! generarlly the problem happens because the network speed is slow and the pages doesn't uploud
 
 if __name__ == "__main__":
-    file_manager.json_folder_maker()
     a = PANEL(choice_list=["Log in","Log out","Profile detail","User search","Following or Follower list","Tweet search","Daily tweets","Asking to grok ai","Quit the app"])
     a.panel()
 
