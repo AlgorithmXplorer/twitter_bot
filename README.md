@@ -1,8 +1,8 @@
 # TWİTTER BOT
 ## Contents
--[Description](#Description)
--[Installation](#Installation)
--[Usage](#Usage)
+-[Description](#Description)<br/>
+-[Installation](#Installation)<br/>
+-[Usage](#Usage)<br/>
 -[Optional:Notes](#Optional:Notes)
 
 ## Description
